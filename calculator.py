@@ -1,4 +1,27 @@
-from Tkinter import *
+from tkinter import *
+
+# name_callbacks=(('One',self.callback_one),
+#                 ('Two',self.callback_two),
+#                 ...,
+#                 ('Ten',self.callback_ten))
+# self.button=[]
+# for i,(name,callback) in enumerate(name_callbacks):
+#     self.button.append(Button(frame, text=name, command=callback))
+#     row,col=divmod(i,5)
+#     self.button[i].grid(sticky=W+E+N+S, row=row, column=col, padx=1, pady=1)
+#
+# def callback(self,i): # This is the callback factory. Calling it returns a function.
+#     def _callback():
+#         print(i) # i tells you which button has been pressed.
+#     return _callback
+#
+# def __init__(self):
+#     names=('One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten')
+#     self.button=[]
+#     for i,name in enumerate(names):
+#         self.button.append(Button(frame, text=name, command=self.callback(i+1)))
+#         row,col=divmod(i,5)
+#         self.button[i].grid(sticky=W+E+N+S, row=row, column=col, padx=1, pady=1)
 
 top = Tk()
 top.title("Calculator")
