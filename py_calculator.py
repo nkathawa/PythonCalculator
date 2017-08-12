@@ -139,7 +139,7 @@ class MainApplication(tk.Frame):
         elif string[-1] in ["+","-","*","/"]:
             return
         string = string + " " + symbol
-        self.lbl.configure(text=string)
+        self.top_lbl.configure(text=string)
 
     def add_number(self, num):
         global string
