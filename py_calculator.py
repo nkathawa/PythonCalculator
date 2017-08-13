@@ -1,23 +1,28 @@
+# imports
 import tkinter as tk
 import operator
+import math
 
-string = " "
-
+# operators
 ops = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
 
 
+# main app class
 class MainApplication(tk.Frame):
-
+    # init function
     def __init__(self, parent, *args, **kwargs):
+        # create the frame
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
+        # create the labels
         self.top_lbl = tk.Label(self.parent, text="", height=2, width=30, borderwidth=1, relief="solid")
         self.top_lbl.grid(row=0, column=0, columnspan=4)
 
         self.lbl = tk.Label(self.parent, text="", height=2, width=30, borderwidth=1, relief="solid")
         self.lbl.grid(row=1, column=0, columnspan=4)
 
+        # create the operations buttons
         self.calc = tk.Button(self.parent, text="=", height=3, width=6, command=self.calculate)
         self.calc.grid(row=7, column=3)
 
@@ -39,9 +44,29 @@ class MainApplication(tk.Frame):
         self.clr_entry = tk.Button(self.parent, text="CE", height=3, width=6, command=self.clear_entry)
         self.clr_entry.grid(row=3, column=0)
 
-        self.delete = tk.Button(self.parent, text="DEL", height=3, width=6, command=self.delete)
-        self.delete.grid(row=3, column=2)
+        self.delete_btn = tk.Button(self.parent, text="DEL", height=3, width=6, command=self.delete)
+        self.delete_btn.grid(row=3, column=2)
 
+        self.negative = tk.Button(self.parent, text="±", command=self.negate, height=3, width=6)
+        self.negative.grid(row=7, column=0)
+
+        self.decimal = tk.Button(self.parent, text=".", command=self.add_decimal, height=3, width=6)
+        self.decimal.grid(row=7, column=2)
+
+        self.percentage = tk.Button(self.parent, text="%", command=self.take_pct, height=3, width=6)
+        self.percentage.grid(row=2, column=0)
+
+        self.square_root = tk.Button(self.parent, text="√", command=self.sqrt, height=3, width=6)
+        self.square_root.grid(row=2, column=1)
+
+        self.square = tk.Button(self.parent, text="x^2", command=self.take_square, height=3, width=6)
+        self.square.grid(row=2, column=2)
+        self.parent.bind('1', self.take_square)
+
+        self.reciprocal = tk.Button(self.parent, text="1/x", command=self.take_recip, height=3, width=6)
+        self.reciprocal.grid(row=2, column=3)
+
+        # create the number buttons
         self.zero = tk.Button(self.parent, text="0", command=lambda: self.add_number(0), height=3, width=6)
         self.zero.grid(row=7, column=1)
 
@@ -72,123 +97,157 @@ class MainApplication(tk.Frame):
         self.nine = tk.Button(self.parent, text="9", command=lambda: self.add_number(9), height=3, width=6)
         self.nine.grid(row=4, column=2)
 
-        self.negative = tk.Button(self.parent, text="±", command=self.negate, height=3, width=6)
-        self.negative.grid(row=7, column=0)
+        # create the bindings
+        self.parent.bind('0', lambda event, num=0: self.add_number(num, event))
+        self.parent.bind('1', lambda event, num=1: self.add_number(num, event))
+        self.parent.bind('2', lambda event, num=2: self.add_number(num, event))
+        self.parent.bind('3', lambda event, num=3: self.add_number(num, event))
+        self.parent.bind('4', lambda event, num=4: self.add_number(num, event))
+        self.parent.bind('5', lambda event, num=5: self.add_number(num, event))
+        self.parent.bind('6', lambda event, num=6: self.add_number(num, event))
+        self.parent.bind('7', lambda event, num=7: self.add_number(num, event))
+        self.parent.bind('8', lambda event, num=8: self.add_number(num, event))
+        self.parent.bind('9', lambda event, num=9: self.add_number(num, event))
 
-        self.decimal = tk.Button(self.parent, text=".", command=self.add_decimal, height=3, width=6)
-        self.decimal.grid(row=7, column=2)
+        self.parent.bind('<Return>', self.calculate)
+        self.parent.bind('<BackSpace>', self.delete)
 
-        self.percentage = tk.Button(self.parent, text="%", command=self.take_pct, height=3, width=6)
-        self.percentage.grid(row=2, column=0)
+        self.parent.bind('<+>', lambda event, symbol="+": self.perform_operation(symbol, event))
+        self.parent.bind('<*>', lambda event, symbol="*": self.perform_operation(symbol, event))
+        self.parent.bind('-', lambda event, symbol="-": self.perform_operation(symbol, event))
+        self.parent.bind('/', lambda event, symbol="/": self.perform_operation(symbol, event))
 
-        self.square_root = tk.Button(self.parent, text="√", command=self.sqrt, height=3, width=6)
-        self.square_root.grid(row=2, column=1)
+        self.parent.bind('.', self.add_decimal)
 
-        self.square = tk.Button(self.parent, text="x^2", command=self.take_square, height=3, width=6)
-        self.square.grid(row=2, column=2)
-
-        self.reciprocal = tk.Button(self.parent, text="1/x", command=self.take_recip, height=3, width=6)
-        self.reciprocal.grid(row=2, column=3)
-
-    def calculate(self):
-        global string
-        if string == " " or (string[-1] in ["+","-","*","/"]):
+    # calculate: perform the listed operation
+    def calculate(self, event=None):
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        # if there is no text in the top, or no text in the bottom, label
+        if not top_text or not text:
+            # return
             return
-        op = ""
-        num1 = ""
-        num2 = ""
-        boolean = 0
-        for elt in string:
-            if elt in ["+","-","*","/"]:
-                op = elt
-                boolean = 1
-            elif boolean == 0:
-                num1 += elt
-            else:
-                num2 += elt
+        # otherwise there is some text in both, do stuff
+        op = top_text[-1]
+        num1 = top_text[0:-2]
+        num2 = self.lbl.cget("text")
+        # answer is the numbers with op done on them
+        if float(num2) == 0 and op == "/":
+            self.lbl.configure(text="")
+            self.top_lbl.configure(text="")
+            return
         answer = ops[op](float(num1), float(num2))
-        string = str(answer)
-        self.lbl.configure(text=string)
+        # bottom lbl is the answer
+        self.lbl.configure(text=str(answer))
+        # top lbl is empty
+        self.top_lbl.configure(text="")
 
+    # clear: clear both labels
     def clear(self):
-        global string
-        string = " "
-        self.lbl.configure(text=string)
+        self.lbl.configure(text="")
+        self.top_lbl.configure(text="")
 
+    # clear the entry label
     def clear_entry(self):
-        global string
-        if string == " ":
-            return
+        self.lbl.configure(text="")
 
-    def delete(self):
-        global string
-        if string == " ":
-            return
-        if len(string) == 2:
-            string = " "
-        elif string[-2] == " ":
-            string = string[0:len(string)-2]
-        else:
-            string = string[0:len(string)-1]
-        self.lbl.configure(text=string)
+    # delete one character
+    def delete(self, event=None):
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        text = text[0:-1]
+        self.lbl.configure(text=text)
 
-    def perform_operation(self, symbol):
-        global string
-        if string == " ":
-            return
-        elif string[-1] in ["+","-","*","/"]:
-            return
-        string = string + " " + symbol
-        self.top_lbl.configure(text=string)
-
-    def add_number(self, num):
-        global string
-        if string[-1] not in ["*","/","-","+"]:
-            string += str(num)
-        else:
-            string = string + " " + str(num)
-        self.lbl.configure(text=string)
-
-    def negate(self):
+    # insert an op (+, -, *, /)
+    def perform_operation(self, symbol, event=None):
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
         # global string
-        # if string == " ":
-        #     return
-        # if string[-1] in ["*", "/", "-", "+"]:
-        #     return
-        # else:
-        #     for i in range(len(string)):
-        #         if string[i] in ["*", "/", "-", "+"]:
-        #             string = string[0:i+1] + " -" + string[i+2:]
-        #             print(string)
-        #             self.lbl.configure(string)
-        #             return
-        # self.lbl.configure(string)
-        pass
+        if top_text and top_text[-1] in ["+", "-", "*", "/"]:
+            return
+        if not top_text and not text:
+            return
+        top_text = text + " " + symbol
+        print(top_text)
+        self.top_lbl.configure(text=top_text)
+        self.lbl.configure(text="")
 
-    def add_decimal(self):
-        global string
-        if string == " ":
-            return
-        if string[-1] not in ["*","/","-","+"]:
-            string += "."
+    # insert a number
+    def add_number(self, num, event=None):
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        # if the top label has stuff
+        if self.top_lbl.cget("text"):
+            # make the bottom one the number plus whatever is there
+            text += str(num)
+            self.lbl.configure(text=text)
         else:
+            text += str(num)
+            self.lbl.configure(text=text)
+
+    # negate a number
+    def negate(self):
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+
+        if not text:
             return
-        self.lbl.configure(text=string)
+        elif text[0] == "-":
+            text = text[1:]
+        else:
+            text = "-" + text
+        self.lbl.configure(text=text)
+
+    # add a decimal to a number
+    def add_decimal(self, event=None):
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+
+        if not text or "." in text:
+            return
+        else:
+            text += "."
+        self.lbl.configure(text=text)
+        pass
 
     def take_pct(self):
-        pass
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        if top_text and top_text[-1] == "+" and text:
+            num1 = float(top_text.split("+")[0])
+            num2 = float(text)
+            ans = num1 * (num2 / 100)
+            self.top_lbl.configure(text="")
+            self.lbl.configure(text=str(ans))
 
     def sqrt(self):
-        pass
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        if not text:
+            return
+        if text[0] == "-":
+            return
+        text = str(math.sqrt(float(text)))
+        self.lbl.configure(text=text)
 
     def take_square(self):
-        pass
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        if not text:
+            return
+        text = str(float(text) ** 2)
+        self.lbl.configure(text=text)
 
     def take_recip(self):
-        pass
+        top_text = self.top_lbl.cget("text")
+        text = self.lbl.cget("text")
+        if not text:
+            return
+        text = str(1 / float(text))
+        self.lbl.configure(text=text)
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.title("Calculator")
+    root.title("Calc")
     MainApplication(root)
     root.mainloop()
