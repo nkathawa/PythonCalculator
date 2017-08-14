@@ -1,10 +1,7 @@
 # imports
 import tkinter as tk
-import operator
+import tkinter.ttk as ttk
 import math
-
-# operators
-ops = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
 
 
 # main app class
@@ -15,86 +12,103 @@ class MainApplication(tk.Frame):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
+        # self.menubar = tk.Menu(self)
+        #
+        # menu = tk.Menu(self.menubar, tearoff=0)
+        # self.menubar.add_cascade(label="Type", menu=menu)
+        # menu.add_command(label="Basic")
+        # menu.add_command(label="Scientific")
+        # menu.add_command(label="Programmer")
+        # menu.add_command(label="Date Calculation")
+        #
+        # menu = tk.Menu(self.menubar, tearoff=0)
+        #
+        # try:
+        #     self.master.config(menu=self.menubar)
+        # except AttributeError:
+        #     # master is a top level window (Python 1.4/Tkinter 1.63)
+        #     self.master.tk.call(root, "config", "-menu", self.menubar)
+
         # create the labels
-        self.top_lbl = tk.Label(self.parent, text="", height=2, width=30, borderwidth=1, relief="solid")
+        self.top_lbl = ttk.Label(self.parent, text="", width=30, font=20, anchor="e")
         self.top_lbl.grid(row=0, column=0, columnspan=4)
 
-        self.lbl = tk.Label(self.parent, text="", height=2, width=30, borderwidth=1, relief="solid")
+        self.lbl = ttk.Label(self.parent, text="", width=30, font=20, anchor="e")
         self.lbl.grid(row=1, column=0, columnspan=4)
 
         # create the operations buttons
-        self.calc = tk.Button(self.parent, text="=", height=3, width=6, command=self.calculate)
+        self.calc = ttk.Button(self.parent, text="=", command=self.calculate)  # height=3, width=6, )
         self.calc.grid(row=7, column=3)
 
-        self.divide = tk.Button(self.parent, text="/", height=3, width=6, command=lambda: self.perform_operation("/"))
+        self.divide = ttk.Button(self.parent, text="/", command=lambda: self.perform_operation("/"))
         self.divide.grid(row=3, column=3)
 
-        self.multiply = tk.Button(self.parent, text="*", height=3, width=6, command=lambda: self.perform_operation("*"))
+        self.multiply = ttk.Button(self.parent, text="*", command=lambda: self.perform_operation("*"))
         self.multiply.grid(row=4, column=3)
 
-        self.subtract = tk.Button(self.parent, text="-", height=3, width=6, command=lambda: self.perform_operation("-"))
+        self.subtract = ttk.Button(self.parent, text="-", command=lambda: self.perform_operation("-"))
         self.subtract.grid(row=5, column=3)
 
-        self.add = tk.Button(self.parent, text="+", height=3, width=6, command=lambda: self.perform_operation("+"))
+        self.add = ttk.Button(self.parent, text="+", command=lambda: self.perform_operation("+"))
         self.add.grid(row=6, column=3)
 
-        self.clr = tk.Button(self.parent, text="C", height=3, width=6, command=self.clear)
+        self.clr = ttk.Button(self.parent, text="C", command=self.clear)
         self.clr.grid(row=3, column=1)
 
-        self.clr_entry = tk.Button(self.parent, text="CE", height=3, width=6, command=self.clear_entry)
+        self.clr_entry = ttk.Button(self.parent, text="CE", command=self.clear_entry)
         self.clr_entry.grid(row=3, column=0)
 
-        self.delete_btn = tk.Button(self.parent, text="DEL", height=3, width=6, command=self.delete)
+        self.delete_btn = ttk.Button(self.parent, text="DEL", command=self.delete)
         self.delete_btn.grid(row=3, column=2)
 
-        self.negative = tk.Button(self.parent, text="±", command=self.negate, height=3, width=6)
+        self.negative = ttk.Button(self.parent, text="±", command=self.negate)
         self.negative.grid(row=7, column=0)
 
-        self.decimal = tk.Button(self.parent, text=".", command=self.add_decimal, height=3, width=6)
+        self.decimal = ttk.Button(self.parent, text=".", command=self.add_decimal)
         self.decimal.grid(row=7, column=2)
 
-        self.percentage = tk.Button(self.parent, text="%", command=self.take_pct, height=3, width=6)
+        self.percentage = ttk.Button(self.parent, text="%", command=self.take_pct)
         self.percentage.grid(row=2, column=0)
 
-        self.square_root = tk.Button(self.parent, text="√", command=self.sqrt, height=3, width=6)
+        self.square_root = ttk.Button(self.parent, text="√", command=self.sqrt)
         self.square_root.grid(row=2, column=1)
 
-        self.square = tk.Button(self.parent, text="x^2", command=self.take_square, height=3, width=6)
+        self.square = ttk.Button(self.parent, text="x^2", command=self.take_square)
         self.square.grid(row=2, column=2)
         self.parent.bind('1', self.take_square)
 
-        self.reciprocal = tk.Button(self.parent, text="1/x", command=self.take_recip, height=3, width=6)
+        self.reciprocal = ttk.Button(self.parent, text="1/x", command=self.take_recip)
         self.reciprocal.grid(row=2, column=3)
 
         # create the number buttons
-        self.zero = tk.Button(self.parent, text="0", command=lambda: self.add_number(0), height=3, width=6)
+        self.zero = ttk.Button(self.parent, text="0", command=lambda: self.add_number(0))
         self.zero.grid(row=7, column=1)
 
-        self.one = tk.Button(self.parent, text="1", command=lambda: self.add_number(1), height=3, width=6)
+        self.one = ttk.Button(self.parent, text="1", command=lambda: self.add_number(1))
         self.one.grid(row=6, column=0)
 
-        self.two = tk.Button(self.parent, text="2", command=lambda: self.add_number(2), height=3, width=6)
+        self.two = ttk.Button(self.parent, text="2", command=lambda: self.add_number(2))
         self.two.grid(row=6, column=1)
 
-        self.three = tk.Button(self.parent, text="3", command=lambda: self.add_number(3), height=3, width=6)
+        self.three = ttk.Button(self.parent, text="3", command=lambda: self.add_number(3))
         self.three.grid(row=6, column=2)
 
-        self.four = tk.Button(self.parent, text="4", command=lambda: self.add_number(4), height=3, width=6)
+        self.four = ttk.Button(self.parent, text="4", command=lambda: self.add_number(4))
         self.four.grid(row=5, column=0)
 
-        self.five = tk.Button(self.parent, text="5", command=lambda: self.add_number(5), height=3, width=6)
+        self.five = ttk.Button(self.parent, text="5", command=lambda: self.add_number(5))
         self.five.grid(row=5, column=1)
 
-        self.six = tk.Button(self.parent, text="6", command=lambda: self.add_number(6), height=3, width=6)
+        self.six = ttk.Button(self.parent, text="6", command=lambda: self.add_number(6))
         self.six.grid(row=5, column=2)
 
-        self.seven = tk.Button(self.parent, text="7", command=lambda: self.add_number(7), height=3, width=6)
+        self.seven = ttk.Button(self.parent, text="7", command=lambda: self.add_number(7))
         self.seven.grid(row=4, column=0)
 
-        self.eight = tk.Button(self.parent, text="8", command=lambda: self.add_number(8), height=3, width=6)
+        self.eight = ttk.Button(self.parent, text="8", command=lambda: self.add_number(8))
         self.eight.grid(row=4, column=1)
 
-        self.nine = tk.Button(self.parent, text="9", command=lambda: self.add_number(9), height=3, width=6)
+        self.nine = ttk.Button(self.parent, text="9", command=lambda: self.add_number(9))
         self.nine.grid(row=4, column=2)
 
         # create the bindings
@@ -128,16 +142,10 @@ class MainApplication(tk.Frame):
             # return
             return
         # otherwise there is some text in both, do stuff
-        op = top_text[-1]
-        num1 = top_text[0:-2]
-        num2 = self.lbl.cget("text")
-        # answer is the numbers with op done on them
-        if float(num2) == 0 and op == "/":
-            self.lbl.configure(text="")
-            self.top_lbl.configure(text="")
-            return
-        answer = ops[op](float(num1), float(num2))
-        # bottom lbl is the answer
+        eqn = top_text + " " + text
+        answer = float(eval(eqn))
+        if answer.is_integer():
+            answer = int(answer)
         self.lbl.configure(text=str(answer))
         # top lbl is empty
         self.top_lbl.configure(text="")
@@ -153,7 +161,7 @@ class MainApplication(tk.Frame):
 
     # delete one character
     def delete(self, event=None):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         text = text[0:-1]
         self.lbl.configure(text=text)
@@ -162,19 +170,19 @@ class MainApplication(tk.Frame):
     def perform_operation(self, symbol, event=None):
         top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
-        # global string
-        if top_text and top_text[-1] in ["+", "-", "*", "/"]:
-            return
+        # if top_text and top_text[-1] in ["+", "-", "*", "/"]:
+        #     return
         if not top_text and not text:
             return
-        top_text = text + " " + symbol
-        print(top_text)
+        if top_text and top_text[-1] in ["+", "-", "*", "/"] and not text:
+            return
+        top_text = top_text + " " + text + " " + symbol
         self.top_lbl.configure(text=top_text)
         self.lbl.configure(text="")
 
     # insert a number
     def add_number(self, num, event=None):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         # if the top label has stuff
         if self.top_lbl.cget("text"):
@@ -187,7 +195,7 @@ class MainApplication(tk.Frame):
 
     # negate a number
     def negate(self):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
 
         if not text:
@@ -200,7 +208,7 @@ class MainApplication(tk.Frame):
 
     # add a decimal to a number
     def add_decimal(self, event=None):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
 
         if not text or "." in text:
@@ -221,7 +229,7 @@ class MainApplication(tk.Frame):
             self.lbl.configure(text=str(ans))
 
     def sqrt(self):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         if not text:
             return
@@ -231,7 +239,7 @@ class MainApplication(tk.Frame):
         self.lbl.configure(text=text)
 
     def take_square(self):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         if not text:
             return
@@ -239,7 +247,7 @@ class MainApplication(tk.Frame):
         self.lbl.configure(text=text)
 
     def take_recip(self):
-        top_text = self.top_lbl.cget("text")
+        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         if not text:
             return
@@ -248,6 +256,9 @@ class MainApplication(tk.Frame):
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.title("Calc")
+    root.title("Calculator")
+    s = ttk.Style()
+    s.theme_use("clam")
+    root.style = s
     MainApplication(root)
     root.mainloop()
