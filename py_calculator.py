@@ -161,7 +161,6 @@ class MainApplication(tk.Frame):
 
     # delete one character
     def delete(self, event=None):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         text = text[0:-1]
         self.lbl.configure(text=text)
@@ -170,8 +169,6 @@ class MainApplication(tk.Frame):
     def perform_operation(self, symbol, event=None):
         top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
-        # if top_text and top_text[-1] in ["+", "-", "*", "/"]:
-        #     return
         if not top_text and not text:
             return
         if top_text and top_text[-1] in ["+", "-", "*", "/"] and not text:
@@ -182,7 +179,6 @@ class MainApplication(tk.Frame):
 
     # insert a number
     def add_number(self, num, event=None):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         # if the top label has stuff
         if self.top_lbl.cget("text"):
@@ -195,7 +191,6 @@ class MainApplication(tk.Frame):
 
     # negate a number
     def negate(self):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
 
         if not text:
@@ -208,7 +203,6 @@ class MainApplication(tk.Frame):
 
     # add a decimal to a number
     def add_decimal(self, event=None):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
 
         if not text or "." in text:
@@ -229,7 +223,6 @@ class MainApplication(tk.Frame):
             self.lbl.configure(text=str(ans))
 
     def sqrt(self):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         if not text:
             return
@@ -239,7 +232,6 @@ class MainApplication(tk.Frame):
         self.lbl.configure(text=text)
 
     def take_square(self):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         if not text:
             return
@@ -247,7 +239,6 @@ class MainApplication(tk.Frame):
         self.lbl.configure(text=text)
 
     def take_recip(self):
-        # top_text = self.top_lbl.cget("text")
         text = self.lbl.cget("text")
         if not text:
             return
