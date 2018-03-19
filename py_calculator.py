@@ -12,23 +12,6 @@ class MainApplication(tk.Frame):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
-        # self.menubar = tk.Menu(self)
-        #
-        # menu = tk.Menu(self.menubar, tearoff=0)
-        # self.menubar.add_cascade(label="Type", menu=menu)
-        # menu.add_command(label="Basic")
-        # menu.add_command(label="Scientific")
-        # menu.add_command(label="Programmer")
-        # menu.add_command(label="Date Calculation")
-        #
-        # menu = tk.Menu(self.menubar, tearoff=0)
-        #
-        # try:
-        #     self.master.config(menu=self.menubar)
-        # except AttributeError:
-        #     # master is a top level window (Python 1.4/Tkinter 1.63)
-        #     self.master.tk.call(root, "config", "-menu", self.menubar)
-
         # create the labels
         self.top_lbl = ttk.Label(self.parent, text="", width=30, font=20, anchor="e")
         self.top_lbl.grid(row=0, column=0, columnspan=4)
