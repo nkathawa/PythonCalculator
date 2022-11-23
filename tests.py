@@ -2,7 +2,8 @@ import unittest
 import tkinter as tk
 import tkinter.ttk as ttk
 import math
-from py_calculator import *
+from MainApplication import *
+from Buttons import *
 
 class TestButtons(unittest.TestCase):
     def setUp(self):
