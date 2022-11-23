@@ -120,13 +120,8 @@ class Buttons:
 
     # insert a number
     def add_number(self, parent, num, event=None) -> None:
-        text = self.getText()
-        if self.top_lbl.cget("text"):
-            text += str(num)
-            self.setText(text)
-        else:
-            text += str(num)
-            self.setText(text)
+        text = self.getText() + str(num)
+        self.setText(text)
 
     # negate a number
     def negate(self) -> None:
