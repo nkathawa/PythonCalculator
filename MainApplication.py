@@ -9,7 +9,9 @@ class MainApplication(tk.Frame):
 
         self.parent = parent
         self.buttons = Buttons(self.parent)
+        self.bind(self.parent, self.buttons)
 
+    def bind(self, parent, buttons) -> None:
         for i in range(10):
             self.parent.bind(str(i), lambda event, num=i: Buttons.add_number(self.buttons, parent, num, event))    
         

@@ -5,7 +5,10 @@ from MainApplication import *
 
 class Buttons:
     def __init__(self, parent):
-        # create the function buttons
+        self.createFunctionButtons(parent)
+        self.createNumberButtons(parent)
+
+    def createFunctionButtons(self, parent) -> None:
         self.top_lbl = ttk.Label(parent, text="", width=30, font=20, anchor="e")
         self.lbl = ttk.Label(parent, text="", width=30, font=20, anchor="e")
         self.calc = ttk.Button(parent, text="=", command=self.calculate)
@@ -40,7 +43,7 @@ class Buttons:
         self.square.grid(row=2, column=2)
         self.reciprocal.grid(row=2, column=3)
 
-        # create the number buttons
+    def createNumberButtons(self, parent) -> None:
         self.zero = ttk.Button(parent, text="0", command=lambda: self.add_number(parent, 0))
         self.one = ttk.Button(parent, text="1", command=lambda: self.add_number(parent, 1))
         self.two = ttk.Button(parent, text="2", command=lambda: self.add_number(parent, 2))
@@ -66,17 +69,17 @@ class Buttons:
     def getTopText(self) -> str:
         return self.top_lbl.cget("text")
     
-    def setTopText(self, input):
+    def setTopText(self, input) -> None:
         self.top_lbl.configure(text=input)
 
     def getText(self) -> str:
         return self.lbl.cget("text")
 
-    def setText(self, input):
+    def setText(self, input) -> None:
         self.lbl.configure(text=input)
 
     # calculate: perform the listed operation
-    def calculate(self, event=None):
+    def calculate(self, event=None) -> None:
         top_text = self.getTopText()
         text = self.getText()
         if not top_text or not text:
@@ -89,22 +92,22 @@ class Buttons:
         self.setTopText("")
 
     # clear: clear both labels
-    def clear(self):
+    def clear(self) -> None:
         self.setText("")
         self.setTopText("")
 
     # clear the entry label
-    def clear_entry(self):
+    def clear_entry(self) -> None:
         self.setText("")
 
     # delete one character
-    def delete(self, event=None):
+    def delete(self, event=None) -> None:
         text = self.getText()
         text = text[0:-1]
         self.setText(text)
 
     # insert an op (+, -, *, /)
-    def perform_operation(self, symbol, event=None):
+    def perform_operation(self, symbol, event=None) -> None:
         top_text = self.getTopText()
         text = self.getText()
         if not top_text and not text:
@@ -116,7 +119,7 @@ class Buttons:
         self.setText("")
 
     # insert a number
-    def add_number(self, parent, num, event=None):
+    def add_number(self, parent, num, event=None) -> None:
         text = self.getText()
         if self.top_lbl.cget("text"):
             text += str(num)
@@ -126,7 +129,7 @@ class Buttons:
             self.setText(text)
 
     # negate a number
-    def negate(self):
+    def negate(self) -> None:
         text = self.getText()
         if not text:
             return
@@ -137,7 +140,7 @@ class Buttons:
         self.setText(text)
 
     # add a decimal to a number
-    def add_decimal(self, event=None):
+    def add_decimal(self, event=None) -> None:
         text = self.getText()
         if not text or "." in text:
             return
@@ -146,7 +149,7 @@ class Buttons:
         self.setText(text)
         pass
 
-    def take_pct(self):
+    def take_pct(self) -> None:
         top_text = self.getTopText()
         text = self.getText()
         if top_text and top_text[-1] == "+" and text:
@@ -156,7 +159,7 @@ class Buttons:
             self.setTopText("")
             self.setText(str(ans))
 
-    def sqrt(self):
+    def sqrt(self) -> None:
         text = self.getText()
         if not text:
             return
@@ -165,14 +168,14 @@ class Buttons:
         text = str(math.sqrt(float(text)))
         self.setText(text)
 
-    def take_square(self):
+    def take_square(self) -> None:
         text = self.getText()
         if not text:
             return
         text = str(float(text) ** 2)
         self.setText(text)
 
-    def take_recip(self):
+    def take_recip(self) -> None:
         text = self.getText()
         if not text:
             return
