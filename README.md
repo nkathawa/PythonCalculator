@@ -9,7 +9,7 @@ in your terminal: \
 `git clone https://github.com/nkathawa/PythonCalculator.git` \
 `cd PythonCalculator` \
 `brew install python-tk` \
-`python3 MainApplication.py` \
+`python3 MainApplication.py`
 
 # Test
 in your terminal: \
